@@ -59,7 +59,16 @@ app.post("/viewmc",async(request,response)=>{
     response.json(result)
 })
 
-
+app.post("/deletec",async(request,response)=>{
+    let data=response.data.data._id
+    console.log(data)
+    let result=await complaintModel.find(data).deleteOne().exec()
+    if (result.acknowledged==true) {
+        response.json({"status":"success"})
+    } else {
+        response.json({"status":"error"})
+    }
+})
 
 
 
