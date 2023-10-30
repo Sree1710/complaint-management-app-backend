@@ -60,7 +60,7 @@ app.post("/viewmc",async(request,response)=>{
 })
 
 app.post("/deletec",async(request,response)=>{
-    let data=response.data.data._id
+    let data=request.body
     console.log(data)
     let result=await complaintModel.find(data).deleteOne().exec()
     if (result.acknowledged==true) {
@@ -70,7 +70,10 @@ app.post("/deletec",async(request,response)=>{
     }
 })
 
-
+app.get("/viewac",async(request,response)=>{
+    let result=await complaintModel.find()
+    response.json(result) 
+})
 
 
 
