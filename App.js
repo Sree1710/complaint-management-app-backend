@@ -41,6 +41,17 @@ app.post("/loginc",async(request,response)=>{
 })
 
 
+app.post("/addc",async(request,response)=>{
+    let data=request.body
+    const complaint=new complaintModel(data)
+    let result=await complaint.save()
+    if (result.compId!="") {
+        response.json({"status":"success"})
+    } else {
+        response.json({"status":"error"})
+    }
+})
+
 
 
 
