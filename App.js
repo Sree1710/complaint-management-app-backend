@@ -52,6 +52,13 @@ app.post("/addc",async(request,response)=>{
     }
 })
 
+app.post("/viewmc",async(request,response)=>{
+    let data=request.body
+    console.log(data)
+    let result=await complaintModel.find(data)
+    response.json(result)
+})
+
 
 
 
