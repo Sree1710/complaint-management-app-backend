@@ -76,8 +76,22 @@ app.get("/viewac",async(request,response)=>{
 })
 
 
+app.post("/updateac",async(request,response)=>{
+    let data=request.body
+    let newData={
+        Remarks:data.Remarks,
+        Status:data.Status
+    }
+    let updateParameter={compId:data.compId}
+    let result=await complaintModel.findOneAndUpdate(updateParameter,newData)
+    response.json({"status":"success"})
+})
 
-
+app.post("/getcompdata",async(request,response)=>{
+    let compid=request.body
+    let result=await complaintModel.find(compid)
+    response.json(result)
+})
 
 
 
