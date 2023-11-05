@@ -87,6 +87,11 @@ app.post("/updateac",async(request,response)=>{
     response.json({"status":"success"})
 })
 
+app.post("/getcompdata",async(request,response)=>{
+    let compid=request.body
+    let result=await complaintModel.find(compid)
+    response.json(result)
+})
 
 
 
