@@ -4,6 +4,7 @@ const Cors=require('cors')
 const mongoose=require('mongoose')
 const userModel = require('./userModel')
 const complaintModel = require('./complaintModel')
+const jwt=require('jsonwebtoken')
 
 const app=express()
 app.use(bodyParser.json())
@@ -31,7 +32,15 @@ app.post("/loginc",async(request,response)=>{
     let result=await userModel.find({username:getUsername})
     if (result.length>0) {
       if (result[0].password==getPassword) {
-        response.json({"status":"success","data":result[0]})
+        jwt.sign({user:getUsername,password:getPassword},"complaintApp",{expiresIn:"1d"},
+        (error,token)=>{
+        if (error) {
+            response.json({"status":"error"})
+        } else {
+            response.json({"status":"success","data":result[0],"token":token})
+        }
+        })
+        
       } else {
         response.json({"status":"Incorrect Username or Password!!"})
       } 
@@ -70,9 +79,19 @@ app.post("/deletec",async(request,response)=>{
     }
 })
 
-app.get("/viewac",async(request,response)=>{
+app.post("/viewac",async(request,response)=>{
+    let token=request.body.token
     let result=await complaintModel.find()
-    response.json(result) 
+    jwt.verify(token,"complaintApp",(error,decoded)=>{
+        if (decoded && decoded.user) {
+            console.log("Verified")
+            console.log(result)
+            response.json(result)  
+        } else {
+            response.json({"status":"unauthorized user"})
+        }
+    })
+    
 })
 
 
